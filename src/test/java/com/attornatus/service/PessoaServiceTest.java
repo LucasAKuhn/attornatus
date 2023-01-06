@@ -20,22 +20,22 @@ import java.util.Optional;
 public class PessoaServiceTest {
 
     @SpyBean
-    PessoaService service;
+    PessoaService pessoaService;
 
     @MockBean
-    PessoaRepository repository;
+    PessoaRepository pessoaRepository;
 
     @Test
     public void  deveSalvarUmaPessoa() {
 
         Pessoa pessoaASalvar = PessoaRepositoryTest.criarPessoa();
-        Mockito.doNothing().when(service).validar(pessoaASalvar);
+        Mockito.doNothing().when(pessoaService).validar(pessoaASalvar);
 
         Pessoa pessoaSalva = PessoaRepositoryTest.criarPessoa();
         pessoaSalva.setId(1l);
-        Mockito.when(repository.save(pessoaASalvar)).thenReturn(pessoaSalva);
+        Mockito.when(pessoaRepository.save(pessoaASalvar)).thenReturn(pessoaSalva);
 
-        Pessoa pessoa = service.salvar(pessoaASalvar);
+        Pessoa pessoa = pessoaService.salvar(pessoaASalvar);
 
         Assertions.assertThat(pessoa.getId()).isEqualTo(pessoaSalva.getId());
     }
@@ -44,10 +44,10 @@ public class PessoaServiceTest {
     public void naoDeveSalvarUmaPessoaQuandoHouverErroDeValidacao() {
 
         Pessoa pessoaASalvar = PessoaRepositoryTest.criarPessoa();
-        Mockito.doThrow( RegraNegocioException.class ).when(service).validar(pessoaASalvar);
+        Mockito.doThrow( RegraNegocioException.class ).when(pessoaService).validar(pessoaASalvar);
 
-        Assertions.catchThrowableOfType( () -> service.salvar(pessoaASalvar), RegraNegocioException.class);
-        Mockito.verify(repository, Mockito.never()).save(pessoaASalvar);
+        Assertions.catchThrowableOfType( () -> pessoaService.salvar(pessoaASalvar), RegraNegocioException.class);
+        Mockito.verify(pessoaRepository, Mockito.never()).save(pessoaASalvar);
     }
 
     @Test
@@ -56,21 +56,21 @@ public class PessoaServiceTest {
         Pessoa pessoa = PessoaRepositoryTest.criarPessoa();
         pessoa.setId(1l);
 
-        service.deletar(pessoa);
+        pessoaService.deletar(pessoa);
 
-        Mockito.verify(repository).delete(pessoa);
+        Mockito.verify(pessoaRepository).delete(pessoa);
     }
 
     @Test
-    public void deveObterUmLancamentoPorID() {
+    public void deveObterUmaPessoaPorID() {
         Long id = 1l;
 
         Pessoa pessoa = PessoaRepositoryTest.criarPessoa();
         pessoa.setId(id);
 
-        Mockito.when( repository.findById(id)).thenReturn( Optional.of(pessoa));
+        Mockito.when( pessoaRepository.findById(id)).thenReturn( Optional.of(pessoa));
 
-        Optional<Pessoa> resultado = Optional.ofNullable(service.buscarPorId(id));
+        Optional<Pessoa> resultado = Optional.ofNullable(pessoaService.buscarPorId(id));
 
         Assertions.assertThat(resultado.isPresent()).isTrue();
     }

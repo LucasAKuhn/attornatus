@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Optional;
-
 @Entity
 @Table(name = "pessoa")
 @Data
@@ -26,5 +24,4 @@ public class Pessoa {
 
     @Column(name = "data_nascimento")
     private String dataNascimento;
-
 }

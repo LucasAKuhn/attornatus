@@ -14,15 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Endereco {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "Logradouro")
-    private String Logradouro;
+    @Column(name = "logradouro")
+    private String logradouro;
 
     @Column(name = "CEP")
     private String CEP;
@@ -34,7 +32,7 @@ public class Endereco {
     private String cidade;
 
     @ManyToOne
-    @JoinColumn(name = "idPessoa")
+    @JoinColumn(name = "id_pessoa")
     private Pessoa pessoa;
 
     @Column(name = "endereco_principal")

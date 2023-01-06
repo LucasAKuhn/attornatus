@@ -22,7 +22,7 @@ import java.util.Optional;
 public class EnderecoRepositoryTest {
 
     @Autowired
-    EnderecoRepository repository;
+    EnderecoRepository enderecoRepository;
 
     @Autowired
     TestEntityManager entityManager;
@@ -31,7 +31,7 @@ public class EnderecoRepositoryTest {
     public void deveSalvarUmEndereco() {
         Endereco endereco = criarEndereco();
 
-        endereco = repository.save(endereco);
+        endereco = enderecoRepository.save(endereco);
 
         Assertions.assertThat(endereco.getId()).isNotNull();
     }
@@ -42,10 +42,10 @@ public class EnderecoRepositoryTest {
 
         endereco = entityManager.find(Endereco.class, endereco.getId());
 
-        repository.delete(endereco);
+        enderecoRepository.delete(endereco);
 
-        Endereco lancamentoInexistete = entityManager.find(Endereco.class, endereco.getId());
-        Assertions.assertThat(lancamentoInexistete).isNull();
+        Endereco enderecoInexistete = entityManager.find(Endereco.class, endereco.getId());
+        Assertions.assertThat(enderecoInexistete).isNull();
     }
 
     @Test
@@ -57,7 +57,7 @@ public class EnderecoRepositoryTest {
         endereco.setNumeroDaCasa(000);
         endereco.setCidade("Arroio do Meio");
 
-        repository.save(endereco);
+        enderecoRepository.save(endereco);
 
         Endereco enderecoAtualizado = entityManager.find(Endereco.class, endereco.getId());
 
@@ -71,9 +71,9 @@ public class EnderecoRepositoryTest {
     public void deveBuscarUmEnderecoPorId() {
         Endereco endereco = criarEPersistirUmEndereco();
 
-        Optional<Endereco> lancamentoEncontrado = repository.findById(endereco.getId());
+        Optional<Endereco> enderecoEncontrado = enderecoRepository.findById(endereco.getId());
 
-        Assertions.assertThat(lancamentoEncontrado.isPresent()).isTrue();
+        Assertions.assertThat(enderecoEncontrado.isPresent()).isTrue();
     }
 
     private Endereco criarEPersistirUmEndereco() {
@@ -83,7 +83,7 @@ public class EnderecoRepositoryTest {
     }
     public static Endereco criarEndereco() {
         return Endereco.builder()
-                .Logradouro("R. Miguel Inácio Faraco")
+                .logradouro("R. Miguel Inácio Faraco")
                 .CEP("88705-050")
                 .numeroDaCasa(355)
                 .cidade("Tubarão")

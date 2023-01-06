@@ -1,11 +1,9 @@
 package com.attornatus.repository;
 
-import com.attornatus.entities.Endereco;
 import com.attornatus.entities.Pessoa;
-import com.attornatus.repositories.EnderecoRepository;
 import com.attornatus.repositories.PessoaRepository;
-import org.junit.Test;
 import org.assertj.core.api.Assertions;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,11 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -28,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class PessoaRepositoryTest {
 
     @Autowired
-    PessoaRepository repository;
+    PessoaRepository pessoaRepository;
 
     @Autowired
     TestEntityManager entityManager;
@@ -37,7 +30,7 @@ public class PessoaRepositoryTest {
     public void deveSalvarUmaPessoa() {
         Pessoa pessoa = criarPessoa();
 
-        pessoa = repository.save(pessoa);
+        pessoa = pessoaRepository.save(pessoa);
 
         Assertions.assertThat(pessoa.getId()).isNotNull();
     }
@@ -48,10 +41,10 @@ public class PessoaRepositoryTest {
 
         pessoa = entityManager.find(Pessoa.class, pessoa.getId());
 
-        repository.delete(pessoa);
+        pessoaRepository.delete(pessoa);
 
-        Pessoa pessoaInexistete = entityManager.find(Pessoa.class, pessoa.getId());
-        Assertions.assertThat(pessoaInexistete).isNull();
+        Pessoa pessoaInexistente = entityManager.find(Pessoa.class, pessoa.getId());
+        Assertions.assertThat(pessoaInexistente).isNull();
     }
 
     @Test
@@ -61,7 +54,7 @@ public class PessoaRepositoryTest {
         pessoa.setNome("Pedro");
         pessoa.setDataNascimento("06/01/2023");
 
-        repository.save(pessoa);
+        pessoaRepository.save(pessoa);
 
         Pessoa pessoaAtualizada = entityManager.find(Pessoa.class, pessoa.getId());
 
@@ -70,10 +63,10 @@ public class PessoaRepositoryTest {
     }
 
     @Test
-    public void deveBuscarUmEnderecoPorId() {
+    public void deveBuscarUmaPessoaPorId() {
         Pessoa pessoa = criarEPersistirUmaPessoa();
 
-        Optional<Pessoa> pessoaEncontrada = repository.findById(pessoa.getId());
+        Optional<Pessoa> pessoaEncontrada = pessoaRepository.findById(pessoa.getId());
 
         Assertions.assertThat(pessoaEncontrada.isPresent()).isTrue();
     }

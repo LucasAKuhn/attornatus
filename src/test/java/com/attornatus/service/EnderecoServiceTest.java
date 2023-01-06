@@ -1,12 +1,9 @@
 package com.attornatus.service;
 
 import com.attornatus.entities.Endereco;
-import com.attornatus.entities.Pessoa;
 import com.attornatus.exception.RegraNegocioException;
 import com.attornatus.repositories.EnderecoRepository;
-import com.attornatus.repositories.PessoaRepository;
 import com.attornatus.repository.EnderecoRepositoryTest;
-import com.attornatus.repository.PessoaRepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,22 +20,22 @@ import java.util.Optional;
 public class EnderecoServiceTest {
 
     @SpyBean
-    EnderecoService service;
+    EnderecoService enderecoService;
 
     @MockBean
-    EnderecoRepository repository;
+    EnderecoRepository enderecoRepository;
 
     @Test
-    public void  deveSalvarUmaPessoa() {
+    public void deveSalvarUmEndereco() {
 
         Endereco enderecoASalvar = EnderecoRepositoryTest.criarEndereco();
-        Mockito.doNothing().when(service).validar(enderecoASalvar);
+        Mockito.doNothing().when(enderecoService).validar(enderecoASalvar);
 
         Endereco enderecoSalvar = EnderecoRepositoryTest.criarEndereco();
         enderecoSalvar.setId(1l);
-        Mockito.when(repository.save(enderecoSalvar)).thenReturn(enderecoSalvar);
+        Mockito.when(enderecoRepository.save(enderecoSalvar)).thenReturn(enderecoSalvar);
 
-        Endereco endereco = service.salvar(enderecoSalvar);
+        Endereco endereco = enderecoService.salvar(enderecoSalvar);
 
         Assertions.assertThat(endereco.getId()).isEqualTo(enderecoSalvar.getId());
     }
@@ -47,10 +44,10 @@ public class EnderecoServiceTest {
     public void naoDeveSalvarUmEnderecoQuandoHouverErroDeValidacao() {
 
         Endereco enderecoASalvar = EnderecoRepositoryTest.criarEndereco();
-        Mockito.doThrow( RegraNegocioException.class ).when(service).validar(enderecoASalvar);
+        Mockito.doThrow( RegraNegocioException.class ).when(enderecoService).validar(enderecoASalvar);
 
-        Assertions.catchThrowableOfType( () -> service.salvar(enderecoASalvar), RegraNegocioException.class);
-        Mockito.verify(repository, Mockito.never()).save(enderecoASalvar);
+        Assertions.catchThrowableOfType( () -> enderecoService.salvar(enderecoASalvar), RegraNegocioException.class);
+        Mockito.verify(enderecoRepository, Mockito.never()).save(enderecoASalvar);
     }
 
     @Test
@@ -59,9 +56,9 @@ public class EnderecoServiceTest {
         Endereco endereco = EnderecoRepositoryTest.criarEndereco();
         endereco.setId(1l);
 
-        service.deletar(endereco);
+        enderecoService.deletar(endereco);
 
-        Mockito.verify(repository).delete(endereco);
+        Mockito.verify(enderecoRepository).delete(endereco);
     }
 
     @Test
@@ -71,9 +68,9 @@ public class EnderecoServiceTest {
         Endereco endereco = EnderecoRepositoryTest.criarEndereco();
         endereco.setId(id);
 
-        Mockito.when( repository.findById(id)).thenReturn( Optional.of(endereco));
+        Mockito.when( enderecoRepository.findById(id)).thenReturn( Optional.of(endereco));
 
-        Optional<Endereco> resultado = Optional.ofNullable(service.buscarPorId(id));
+        Optional<Endereco> resultado = Optional.ofNullable(enderecoService.buscarPorId(id));
 
         Assertions.assertThat(resultado.isPresent()).isTrue();
     }

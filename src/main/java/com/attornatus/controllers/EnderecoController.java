@@ -30,7 +30,7 @@ public class EnderecoController {
 
     //Criar endereço para pessoa
     @PostMapping
-    public ResponseEntity save(@RequestBody EnderecoDTO dto) {
+    public ResponseEntity salvar(@RequestBody EnderecoDTO dto) {
         try{
             Endereco endereco = converter(dto);
             endereco = service.salvar(endereco);
@@ -41,14 +41,14 @@ public class EnderecoController {
     }
 
     @GetMapping(value = "/achar-todos-enderecos")
-    public ResponseEntity findAll() {
+    public ResponseEntity acharTodos() {
 
         return ResponseEntity.ok(service.buscar());
     }
 
     //Listar endereços da pessoa
     @GetMapping(value = "/achar-endereco-por-id/{id}")
-    public ResponseEntity findById(@PathVariable Long id) {
+    public ResponseEntity acharPorId(@PathVariable Long id) {
         Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
         if (!enderecoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Endereço não encontrado");
@@ -58,8 +58,8 @@ public class EnderecoController {
     }
 
     @PutMapping(value = "/atualizar/{id}")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id,
-                                         @RequestBody Endereco endereco) {
+    public ResponseEntity<Object> atualizar(@PathVariable(value = "id") Long id,
+                                            @RequestBody Endereco endereco) {
         Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
         if(!enderecoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Endereço não encontrado");
@@ -80,7 +80,7 @@ public class EnderecoController {
     }
 
     @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> deletar(@PathVariable(value = "id") Long id) {
         Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
         if(!enderecoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Endereço não encontrado");
@@ -91,7 +91,7 @@ public class EnderecoController {
 
     //Listar endereços da pessoa
     @GetMapping(value = "listar-enderecos-por-pessoa")
-    public ResponseEntity findEnderecosPorPessoa(@Param("id") Long idPessoa) {
+    public ResponseEntity acharEnderecosPorPessoa(@Param("id") Long idPessoa) {
 
         return ResponseEntity.ok().body(service.obterEnderecosPorIdDePessoa(idPessoa));
     }
